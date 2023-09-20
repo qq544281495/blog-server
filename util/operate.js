@@ -1,5 +1,5 @@
-const fs = require("fs");
-const { promisify } = require("util");
+const fs = require('fs');
+const {promisify} = require('util');
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 const renameFile = promisify(fs.rename);
@@ -10,7 +10,7 @@ module.exports = {
   // 读取文件
   read: async (url) => {
     try {
-      let data = await readFile(url, "utf-8");
+      const data = await readFile(url, 'utf-8');
       return JSON.parse(data);
     } catch (error) {
       throw new Error(error.message);
@@ -19,7 +19,7 @@ module.exports = {
   // 写入文件
   write: async (url, content) => {
     try {
-      let data = JSON.stringify(content);
+      const data = JSON.stringify(content);
       return await writeFile(url, data);
     } catch (error) {
       throw new Error(error.message);
