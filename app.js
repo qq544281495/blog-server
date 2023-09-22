@@ -1,15 +1,16 @@
-const express = require("express");
-const cors = require("cors");
-const morgan = require("morgan");
-const router = require("./routes/index");
+const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+const router = require('./routes/index');
+require('./config/db'); // 连接数据库
 
 const app = express();
 // 中间件
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static('public'));
 app.use(cors());
-app.use(morgan("dev"));
-app.use("/api", router);
+app.use(morgan('dev'));
+app.use('/api', router);
 
 const PORT = 8000;
 app.listen(PORT, () => {

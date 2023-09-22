@@ -1,8 +1,7 @@
-const express = require("express");
+const express = require('express');
 const router = new express.Router();
 
-router.get("/", (request, response) => {
-  response.status(200).json({ message: "博客服务端" });
-});
+router.use('/user', require('./user'));
+router.use('/article', require('./article'));
 
 module.exports = router;
