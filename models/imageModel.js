@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const articleImageModel = new mongoose.Schema({
+const imageSchema = new mongoose.Schema({
   user: {
     type: mongoose.ObjectId,
     required: true,
@@ -16,8 +16,4 @@ const articleImageModel = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model(
-  'ArticleImage',
-  articleImageModel,
-  'ArticleImages'
-);
+module.exports = mongoose.model('Image', imageSchema, 'images');

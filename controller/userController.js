@@ -1,8 +1,6 @@
-const {param} = require('express-validator');
 const User = require('../models/userModel'); // 用户数据模型
 const {signToken} = require('../util/jwt');
 const operate = require('../util/operate'); // 文件操作工具类
-const lodash = require('lodash');
 
 // 保存头像
 async function savePortrait(id, filename, originalname) {
