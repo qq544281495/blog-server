@@ -1,5 +1,5 @@
 const operate = require('../util/operate'); // 文件操作工具类
-const Image = require('../models/imageModel'); // 用户数据模型
+const Image = require('../models/imageModel'); // 文章图片数据模型
 
 module.exports = {
   // 上传文章图片

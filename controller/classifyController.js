@@ -1,5 +1,5 @@
 const operate = require('../util/operate'); // 文件操作工具类
-const Classify = require('../models/classifyModel'); // 用户数据模型
+const Classify = require('../models/classifyModel'); // 分类数据模型
 
 // 删除分类默认封面
 async function deleteCover(url) {
