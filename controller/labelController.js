@@ -13,8 +13,7 @@ module.exports = {
   },
   search: async (request, response) => {
     try {
-      let {pageNumber, pageSize, label, publish} = request.body;
-      let params = {};
+      let {pageNumber, pageSize, label, publish, ...params} = request.body;
       if (label) params.label = new RegExp(label, 'i');
       if (typeof publish === 'number') params.publish = publish;
       let list = await Label.find(params)

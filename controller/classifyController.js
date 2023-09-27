@@ -1,7 +1,7 @@
 const operate = require('../util/operate'); // 文件操作工具类
 const Classify = require('../models/classifyModel'); // 分类数据模型
 
-// 删除分类默认封面
+// 删除图片
 async function deleteCover(url) {
   if (await operate.exists(url)) {
     await operate.delete(url);
@@ -33,8 +33,7 @@ module.exports = {
   },
   search: async (request, response) => {
     try {
-      let {pageNumber, pageSize, classify, publish} = request.body;
-      let params = {};
+      let {pageNumber, pageSize, classify, publish, ...params} = request.body;
       if (classify) params.classify = new RegExp(classify, 'i');
       if (typeof publish === 'number') params.publish = publish;
       let list = await Classify.find(params)
@@ -96,10 +95,10 @@ module.exports = {
           params.cover = `/classifyImage/${imageUrl}`;
         }
         await Classify.findByIdAndUpdate(id, params);
+        response.status(200).json({data: {message: '分类编辑成功'}});
       } else {
-        return response.status(404).json({error: '分类不存在'});
+        response.status(404).json({error: '分类不存在'});
       }
-      response.status(200).json({data: {message: '分类编辑成功'}});
     } catch (error) {
       response.status(500).json({error: error.message});
     }
