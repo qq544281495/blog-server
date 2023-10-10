@@ -33,7 +33,13 @@ module.exports = {
   },
   search: async (request, response) => {
     try {
-      let {pageNumber, pageSize, classify, publish, ...params} = request.body;
+      let {
+        pageNumber = 1,
+        pageSize = 10,
+        classify,
+        publish,
+        ...params
+      } = request.body;
       if (classify) params.classify = new RegExp(classify, 'i');
       if (typeof publish === 'number') params.publish = publish;
       let list = await Classify.find(params)

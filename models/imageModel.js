@@ -6,7 +6,7 @@ const imageSchema = new mongoose.Schema({
     required: true,
     ref: 'User',
   },
-  articleImage: {
+  image: {
     type: String,
     require: true,
   },

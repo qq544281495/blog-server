@@ -1,4 +1,4 @@
-const Label = require('../models/labelModel'); // 用户数据模型
+const Label = require('../models/labelModel'); // 标签数据模型
 
 module.exports = {
   create: async (request, response) => {
@@ -13,7 +13,13 @@ module.exports = {
   },
   search: async (request, response) => {
     try {
-      let {pageNumber, pageSize, label, publish, ...params} = request.body;
+      let {
+        pageNumber = 1,
+        pageSize = 10,
+        label,
+        publish,
+        ...params
+      } = request.body;
       if (label) params.label = new RegExp(label, 'i');
       if (typeof publish === 'number') params.publish = publish;
       let list = await Label.find(params)

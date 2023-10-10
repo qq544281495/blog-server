@@ -5,6 +5,10 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  editContent: {
+    type: String,
+    required: true,
+  },
   content: {
     type: String,
     required: true,
@@ -23,6 +27,10 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+    required: true,
+  },
   publish: {
     type: Number,
     enum: [1, 0],
@@ -31,7 +39,7 @@ const articleSchema = new mongoose.Schema({
   },
   updateDate: {
     type: Date,
-    default: Date(),
+    default: Date.now(),
   },
   createdDate: {
     type: Date,

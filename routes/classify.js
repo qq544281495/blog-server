@@ -13,7 +13,7 @@ router.post(
   classifyController.create
 );
 // 获取分类
-router.post('/search', verifyToken(), classifyController.search);
+router.post('/search', classifyController.search);
 // 删除分类
 router.delete('/delete', verifyToken(), classifyController.delete);
 // 编辑分类

@@ -1,5 +1,4 @@
 const operate = require('../util/operate'); // 文件操作工具类
-const Image = require('../models/imageModel'); // 文章图片数据模型
 const Article = require('../models/articleModel'); // 文章数据模型
 const Classify = require('../models/classifyModel'); // 分类数据模型
 
@@ -10,42 +9,6 @@ async function deleteCover(url) {
 }
 
 module.exports = {
-  // 上传文章图片
-  uploadImage: async (request, response) => {
-    try {
-      let {_id} = request.user;
-      let {filename, originalname} = request.file;
-      let extension = originalname.split('.').pop();
-      let imageUrl = `${filename}.${extension}`;
-      await operate.rename(
-        `./public/image/${filename}`,
-        `./public/image/${imageUrl}`
-      );
-      let params = {
-        user: _id,
-        articleImage: `/image/${imageUrl}`,
-      };
-      const image = await Image(params);
-      await image.save();
-      response.status(200).json({data: params});
-    } catch (error) {
-      response.status(500).json({error});
-    }
-  },
-  // 删除文章图片
-  deleteImage: async (request, response) => {
-    try {
-      let {articleImage} = request.body;
-      let {_id} = await Image.findOne({articleImage});
-      await Image.findByIdAndDelete(_id);
-      if (await operate.exists(`./public${articleImage}`)) {
-        await operate.delete(`./public${articleImage}`);
-        response.status(200).json({data: {message: '文章图片删除成功'}});
-      }
-    } catch (error) {
-      response.status(500).json({error});
-    }
-  },
   // 上传文章
   uploadArticle: async (request, response) => {
     try {
@@ -74,9 +37,16 @@ module.exports = {
   // 查询文章
   search: async (request, response) => {
     try {
-      let {pageNumber, pageSize, title, publish, ...params} = request.body;
+      let {
+        pageNumber = 1,
+        pageSize = 10,
+        title,
+        publish,
+        ...params
+      } = request.body;
       if (title) params.title = new RegExp(title, 'i');
       if (typeof publish === 'number') params.publish = publish;
+      if (params.classify === '') delete params.classify;
       let list = await Article.find(params)
         .skip((pageNumber - 1) * pageSize)
         .limit(pageSize)

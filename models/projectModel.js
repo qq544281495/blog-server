@@ -1,17 +1,29 @@
 const mongoose = require('mongoose');
 
-const classifySchema = new mongoose.Schema({
-  classify: {
+const ProjectSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  technology: {
+    type: String,
+    required: true,
+  },
+  editContent: {
+    type: String,
+    required: true,
+  },
+  content: {
     type: String,
     required: true,
   },
   cover: {
     type: String,
-    require: true,
+    required: true,
   },
-  remark: {
+  description: {
     type: String,
-    default: '',
+    required: true,
   },
   publish: {
     type: Number,
@@ -29,4 +41,4 @@ const classifySchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Classify', classifySchema, 'classifys');
+module.exports = mongoose.model('Project', ProjectSchema, 'projects');
