@@ -1,6 +1,7 @@
 const operate = require('../util/operate'); // 文件操作工具类
 const Article = require('../models/articleModel'); // 文章数据模型
 const Classify = require('../models/classifyModel'); // 分类数据模型
+const ArticleComment = require('../models/articleCommentModel'); // 文章评论数据模型
 
 async function deleteCover(url) {
   if (await operate.exists(url)) {
@@ -14,6 +15,8 @@ module.exports = {
     try {
       let {...params} = request.body;
       params.label = params.label.split(',');
+      params.updateDate = new Date();
+      params.createdDate = new Date();
       if (request.file) {
         let {filename, originalname} = request.file;
         let extension = originalname.split('.').pop();
@@ -70,7 +73,11 @@ module.exports = {
       let data = await Article.findById(id)
         .populate('classify', 'classify')
         .populate('label', 'label');
-      response.status(200).json({data});
+      if (data) {
+        response.status(200).json({data});
+      } else {
+        response.status(404).json({error: '文章不存在'});
+      }
     } catch (error) {
       response.status(500).json({error: error.message});
     }
@@ -81,6 +88,7 @@ module.exports = {
       let {id, ...params} = request.body;
       let article = await Article.findById(id);
       if (article) {
+        params.updateDate = new Date();
         if (request.file) {
           let deleteImageUrl = `./public${article.cover}`;
           if (deleteImageUrl.indexOf('articleImage') != -1) {
@@ -119,6 +127,7 @@ module.exports = {
             await deleteCover(imageUrl);
           }
         }
+        await ArticleComment.deleteMany({article: {$in: id}});
         await Article.deleteMany({_id: {$in: id}});
       } else {
         let article = await Article.findById(id);
@@ -129,6 +138,7 @@ module.exports = {
         if (imageUrl.indexOf('articleImage') != -1) {
           await deleteCover(imageUrl);
         }
+        await ArticleComment.deleteMany({article: id});
         await Article.findByIdAndDelete(id);
       }
       response.status(200).json({data: {message: '文章删除成功'}});

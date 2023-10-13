@@ -16,6 +16,7 @@ module.exports = {
       let params = {
         user: _id,
         image: `/image/${imageUrl}`,
+        createdDate: new Date(),
       };
       const image = await Image(params);
       await image.save();

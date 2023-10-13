@@ -19,6 +19,8 @@ module.exports = {
         `./public/projectImage/${imageUrl}`
       );
       params.cover = `/projectImage/${imageUrl}`;
+      params.createdDate = new Date();
+      params.updateDate = new Date();
       let project = await Project(params);
       await project.save();
       response.status(200).json({data: {message: '项目发布成功'}});
@@ -55,7 +57,11 @@ module.exports = {
     try {
       let id = request.body.id;
       let data = await Project.findById(id);
-      response.status(200).json({data});
+      if (data) {
+        response.status(200).json({data});
+      } else {
+        response.status(404).json({error: '项目不存在'});
+      }
     } catch (error) {
       response.status(500).json({error: error.message});
     }
@@ -79,6 +85,7 @@ module.exports = {
           );
           params.cover = `/projectImage/${imageUrl}`;
         }
+        params.updateDate = new Date();
         await Project.findByIdAndUpdate(id, params);
         response.status(200).json({data: {message: '项目更新完成'}});
       } else {
@@ -115,6 +122,29 @@ module.exports = {
         await Project.findByIdAndDelete(id);
       }
       response.status(200).json({data: {message: '项目删除成功'}});
+    } catch (error) {
+      response.status(500).json({error: error.message});
+    }
+  },
+  addLink: async (request, response) => {
+    try {
+      let {id, ...params} = request.body;
+      let project = await Project.findById(id);
+      if (project) {
+        await Project.findByIdAndUpdate(id, {$addToSet: {links: params}});
+        response.status(200).json({data: {message: '链接添加成功'}});
+      } else {
+        response.status(404).json({error: '项目不存在'});
+      }
+    } catch (error) {
+      response.status(500).json({error: error.message});
+    }
+  },
+  deleteLink: async (request, response) => {
+    try {
+      let {id, ...params} = request.body;
+      await Project.findByIdAndUpdate(id, {$pull: {'links': params}});
+      response.status(200).json({data: {message: '链接删除成功'}});
     } catch (error) {
       response.status(500).json({error: error.message});
     }

@@ -23,6 +23,8 @@ module.exports = {
         remark: request.body.remark,
         publish: request.body.publish,
         cover: `/classifyImage/${imageUrl}`,
+        updateDate: new Date(),
+        createdDate: new Date(),
       };
       const classify = await Classify(params);
       await classify.save();
@@ -100,6 +102,7 @@ module.exports = {
           );
           params.cover = `/classifyImage/${imageUrl}`;
         }
+        params.updateDate = new Date();
         await Classify.findByIdAndUpdate(id, params);
         response.status(200).json({data: {message: '分类编辑成功'}});
       } else {

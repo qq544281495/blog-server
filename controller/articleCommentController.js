@@ -4,6 +4,7 @@ module.exports = {
   publish: async (request, response) => {
     try {
       let params = request.body;
+      params.createdDate = new Date();
       let comment = await ArticleComment(params);
       await comment.save();
       response.status(200).json({data: {message: '发表评论成功'}});

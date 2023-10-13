@@ -24,5 +24,8 @@ router.put(
 );
 // 删除项目介绍
 router.delete('/delete', verifyToken(), projectController.delete);
+// 添加链接
+router.post('/addLink', verifyToken(), projectController.addLink);
+router.delete('/deleteLink', verifyToken(), projectController.deleteLink);
 
 module.exports = router;

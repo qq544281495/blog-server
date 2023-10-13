@@ -6,6 +6,8 @@ module.exports = {
       let params = request.body;
       let label = await Label(params);
       await label.save();
+      params.createdDate = new Date();
+      params.updateDate = new Date();
       response.status(200).json({data: {message: '标签创建成功'}});
     } catch (error) {
       response.status(500).json({error: error.message});
@@ -42,6 +44,7 @@ module.exports = {
       let {_id, ...params} = request.body;
       let label = await Label.findById(_id);
       if (label) {
+        params.updateDate = new Date();
         await Label.findByIdAndUpdate(_id, params);
         response.status(200).json({data: {message: '标签编辑成功'}});
       } else {
